@@ -8,7 +8,7 @@ from flask_swagger import swagger
 from flask_cors import CORS
 from utils import APIException, generate_sitemap
 from admin import setup_admin
-from models import db, User
+from models import db, User, Planets, People
 #from models import Person
 
 app = Flask(__name__)
@@ -35,6 +35,58 @@ def handle_hello():
 
     response_body = {
         "msg": "Hello, this is your GET /user response "
+    }
+
+    return jsonify(response_body), 200
+
+@app.route('/planets', methods=['GET'])
+def get_planets():
+    planets= Planets.query.all()
+
+    results = list(map(lambda item: item.serialize(),planets))
+
+    response_body = {
+        "msg":"Todo creado con exito",
+        "results": results
+    }
+
+    return jsonify(results), 200
+
+@app.route('/planets/<int:planet_id>', methods=['GET'])
+def get_one_planet(planet_id):
+    planet = Planets.query.filter_by(id=planet_id).first()
+    print(planet.serialize()) #<Planet 1>
+    # results = list(map(lambda item: item.serialize(),planets))
+
+    response_body = {
+        "msg":"Todo creado con exito",
+        "planet": planet.serialize()
+    }
+
+    return jsonify(response_body), 200
+
+@app.route('/people', methods=['GET'])
+def get_people():
+    people= People.query.all()
+
+    results = list(map(lambda item: item.serialize(),people))
+
+    response_body = {
+        "msg":"Todo creado con exito",
+        "results": results
+    }
+
+    return jsonify(results), 200
+
+@app.route('/people/<int:planet_id>', methods=['GET'])
+def get_one_people(people_id):
+    people = People.query.filter_by(id=people_id).first()
+    print(people.serialize()) #<Planet 1>
+    # results = list(map(lambda item: item.serialize(),planets))
+
+    response_body = {
+        "msg":"Todo creado con exito",
+        "people": people.serialize()
     }
 
     return jsonify(response_body), 200
