@@ -46,7 +46,6 @@ def get_planets():
     results = list(map(lambda item: item.serialize(),planets))
 
     response_body = {
-        "msg":"Todo creado con exito",
         "results": results
     }
 
@@ -59,7 +58,6 @@ def get_one_planet(planet_id):
     # results = list(map(lambda item: item.serialize(),planets))
 
     response_body = {
-        "msg":"Todo creado con exito",
         "planet": planet.serialize()
     }
 
@@ -78,15 +76,25 @@ def get_people():
 
     return jsonify(results), 200
 
-@app.route('/people/<int:planet_id>', methods=['GET'])
+@app.route('/people/<int:people_id>', methods=['GET'])
 def get_one_people(people_id):
     people = People.query.filter_by(id=people_id).first()
     print(people.serialize()) #<Planet 1>
     # results = list(map(lambda item: item.serialize(),planets))
 
     response_body = {
-        "msg":"Todo creado con exito",
         "people": people.serialize()
+    }
+
+    return jsonify(response_body), 200
+
+@app.route('/favorite/planet/<int:planet_id>/<int:user_id>', methods=['POST'])
+def post_favorite_planet(planet_id, user_id):
+    favorite_planet = Favorites(user_id=int(user_id), planet_id=int(planet_id), people_id = None)
+    db.session.add(favorite_planet) 
+    db.session.commit()
+    response_body = {
+        "msg": "favorito agregado exitosamente"
     }
 
     return jsonify(response_body), 200
